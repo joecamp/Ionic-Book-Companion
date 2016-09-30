@@ -1,0 +1,33 @@
+<ion-side-menus>
+	<ion-pane ion-side-menu-content>
+    <ion-nav-bar class="bar-royal">
+      <ion-nav-buttons side="left">
+        <button class="button button-clear menu-toggle="left">
+        	<i class="icon ion-navicon"></i>
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+  </ion-pane>
+  <ion-side-menu side="left">
+    <header class="bar bar-header bar-royal">
+      <button class="button button-icon ion-trash-a" ng-click="showDelete = !showDelete">
+      </button>
+      <h1 class="title">Books</h1>
+      <button class="button button-icon ion-plus" ng-click="openBookModal(); showDelete = false">
+      </button>
+    </header>
+  <ion-content scroll="true" class="has-header">
+    <ion-list show-delete="showDelete">
+      <ion-item class="item-borderless item-text-wrap menu-toggle="left" ng-click="setActiveBook(book)" ng-repeat="book in books">
+        <span style="margin-bottom:.5em; font-style: italic">{{book.title}}</span>
+        <br />
+        <span style="font-size:.9em">by </span> 
+        <span style="font-size:.91em">{{book.author}}</span>
+        <ion-delete-button class="ion-minus-circled" ng-click="deleteBook(book)">
+        </ion-delete-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+  </ion-side-menu>
+</ion-side-menus>

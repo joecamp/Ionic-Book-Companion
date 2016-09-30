@@ -1,0 +1,11 @@
+.popup-head {
+	border-bottom: none;
+}
+
+.popup-body {
+	text-align: center;
+}
+
+.popup-buttons.row {
+	text-align: center;
+}

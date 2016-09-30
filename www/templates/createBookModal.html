@@ -1,0 +1,31 @@
+<ion-modal-view>
+	<ion-header-bar class="bar-royal">
+		<h1 class="title">Add Book</h1>
+		<div class="buttons">
+			<button class="button button-icon icon ion-close-circled" ng-click="closeBookModal()"></button>
+		</div>
+	</ion-header-bar>
+
+	<ion-content>
+		<form name="createBookForm" ng-submit="createBook()">
+			<div class="list">
+				<label class="item item-input">
+					<span class="input-label" style="display: inline-block; width: 5em">Title</span>
+						<input type="text" name="title" ng-model="tempBook.title" required style="text-align:left" />
+				</label>
+				<label class="item item-input">
+					<span class="input-label" style="display: inline-block; width: 5em">Author</span>
+						<input type="text" name="author" ng-model="tempBook.author" required style="text-align:left" />
+				</label>
+
+				<label class="item">
+					<button class="button button-block button-royal" ng-disabled="createBookForm.$invalid" type="submit">Done</button>
+				</label>
+			</div>
+		<div style="padding:2em; text-align:center">
+			<p ng-show="createBookForm.title.$error.required">* Title is required *</p>
+			<p ng-show="createBookForm.author.$error.required">* Author is required *</p>
+		</div>
+		</form>
+	</ion-content>
+</ion-modal-view>
