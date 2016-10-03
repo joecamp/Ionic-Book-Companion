@@ -1,10 +1,46 @@
-<ion-view title={{activeCharacter.name}} hide-nav-bar="false">
+<ion-view title="{{activeBook.title}}" hide-nav-bar="false">
+	{{retrieveActiveCharacterFromStorage()}}
+	<ion-nav-title>
+		{{activeCharacter.name}}
+	</ion-nav-title>
 	<ion-nav-buttons side="left">
 		<a class="button button-clear icon ion-android-arrow-back" href="#/app/characters"></a>
   </ion-nav-buttons>
   <ion-nav-buttons side="right">
-		<button class="button button-clear icon ion-compose"></button>
+		<button class="button button-clear icon ion-compose" ng-click="openEditCharModal()"></button>
   </ion-nav-buttons>
-	<ion-content scroll="false" class="has-header padding">
+	<ion-content scroll="true" class="has-header padding">
+		<ion-list>
+			<div class="card">
+				<div class="item item-text-wrap">
+					<span ng-if="activeCharacter.characterType">
+						{{activeCharacter.name}} is a {{activeCharacter.characterType.toLowerCase()}} in <span style="font-style:italic">{{activeBook.title}}</span>.
+					</span>
+					<span ng-if="!activeCharacter.characterType">
+						{{activeCharacter.name}} is a character in <span style="font-style:italic">{{activeBook.title}}</span>.
+					</span>
+				</div>
+			</div>
+			<div class="card">
+				<div class="item item-text-wrap">
+					<span ng-if="activeCharacter.firstAppeared">
+						{{activeCharacter.name}} first appeared on page {{activeCharacter.firstAppeared}} of <span style="font-style:italic">{{activeBook.title}}</span>.
+					</span>
+					<span ng-if="!activeCharacter.firstAppeared">
+						There is no information on when {{activeCharacter.name}} first appeared.
+					</span>
+				</div>
+			</div>
+			<div class="card">
+				<div class="item item-text-wrap">
+				Description of {{activeCharacter.name}}:<br /> {{activeCharacter.description}} <span ng-if="!activeCharacter.description">N/A</span>
+				</div>
+			</div>
+			<div class="card">
+				<div class="item item-text-wrap">
+				Notes for {{activeCharacter.name}}:<br /> {{activeCharacter.notes}} <span ng-if="!activeCharacter.notes">N/A</span>
+				</div>
+			</div>
+		</ion-list>
 	</ion-content>
 </ion-view>

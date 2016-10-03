@@ -1,43 +1,46 @@
 <ion-modal-view>
 	<ion-header-bar class="bar-royal">
-		<h1 class="title">Add Character</h1>
 		<div class="buttons">
-			<button class="button button-icon icon ion-close-circled" ng-click="closeCharacterModal()"></button>
+			<button class="button button-icon icon ion-trash-a" ng-click="deleteActiveCharacter()"></button>
+		</div>
+		<h1 class="title">Edit Character</h1>
+		<div class="buttons">
+			<button class="button button-icon icon ion-close-circled" ng-click="editCharacter()"></button>
 		</div>
 	</ion-header-bar>
 	<ion-content>
-		<form name="createCharacterForm" ng-submit="addCharacterToActiveBook()">
+		<form name="editCharacterForm" ng-submit="editCharacter()">
 			<div class="list">
 				<label class="item item-input">
 					<span class="input-label" style="display: inline-block; width: 5em">Name</span>
-					<input type="text" name="name" ng-model="tempChar.name" required style="text-align:right" />
+					<input type="text" name="name" ng-model="editChar.name" required style="text-align:right" />
 				</label>
 				<label class="item item-input">
 					<span class="input-label" style="display: inline-block; width: 5em">First Appeared</span>
-					<input type="number" name="firstAppeared" ng-model="tempChar.firstAppeared" placeholder="Page Number" ng-model="tempChar.firstAppeared" style="text-align:right" />
+					<input type="number" name="firstAppeared" ng-model="editChar.firstAppeared" placeholder="Page Number" ng-model="edit.firstAppeared" style="text-align:right" />
 				</label>
 				<label class="item item-input item-select">
 					<span class="input-label" style="display: inline-block; width: 5em">Character Type</span>
-					<select name="characterType" ng-model="tempChar.characterType">
+					<select name="characterType" ng-model="editChar.characterType">
 						<option>Main Character</option>
 						<option>Side Character</option>
 					</select>
 				</label>
 				<label class="item item-input">
 					<span class="input-label" style="display: inline-block; width: 5em">Description</span>
-					<textarea name="description" ng-model="tempChar.description" style="font-size: 1em; margin-left:2em"></textarea>
+					<textarea name="description" ng-model="editChar.description" style="font-size: 1em; margin-left:2em"></textarea>
 				</label>
 				<label class="item item-input">
 					<span class="input-label" style="display: inline-block; width: 5em">Notes&#160;&#160;&#160;&#160;&#160;&#160;</span>
-					<textarea name="notes" ng-model="tempChar.notes" style="font-size: 1em; margin-left:2.1em"></textarea>
+					<textarea name="notes" ng-model="editChar.notes" style="font-size: 1em; margin-left:2.1em"></textarea>
 				</label>
 
 				<label class="item">
-					<button class="button button-block button-royal" ng-disabled="createCharacterForm.$invalid" type="submit">Done</button>
+					<button class="button button-block button-royal" ng-disabled="editCharacterForm.$invalid" type="submit">Done</button>
 				</label>
 			</div>
 		<div style="padding:2em; text-align:center">
-			<p ng-show="createCharacterForm.name.$error.required">* Name is required *</p>
+			<p ng-show="editCharacterForm.name.$error.required">* Name is required *</p>
 		</div>
 		</form>
 	</ion-content>

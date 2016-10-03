@@ -1,7 +1,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('start', ['ionic', 'start.characters', 'start.character'])
+angular.module('start', ['ngStorage', 'ionic', 'start.characters', 'start.character'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -38,18 +38,18 @@ angular.module('start', ['ionic', 'start.characters', 'start.character'])
 
     $stateProvider
 
-      .state('app', {
-        url: "/app",
-        abstract: true,
-        templateUrl: "templates/menu.html",
-        controller: 'AppCtrl'
-      })
+    .state('app', {
+      url: "/app",
+      abstract: true,
+      templateUrl: "templates/menu.html",
+      controller: 'AppCtrl'
+    })
 
     $urlRouterProvider.otherwise('/app/characters');
 
   })
 
-  .controller('AppCtrl', function ($scope, Books, $ionicModal, $ionicPopup) {
+  .controller('AppCtrl', function ($scope, Books, $localStorage, $ionicModal, $ionicPopup) {
 
     $scope.exampleBook1 = {
       title: 'The Dark Tower',
@@ -76,8 +76,20 @@ angular.module('start', ['ionic', 'start.characters', 'start.character'])
       characters: []
     }
 
-    $scope.books = [$scope.exampleBook1, $scope.exampleBook2];
-    $scope.activeBook = $scope.books[0];
+    //$scope.books = [$scope.exampleBook1, $scope.exampleBook2];
+    // if there are books saved on localStorage, load those into scope
+    if($localStorage.books) {
+      $scope.books = $localStorage.books;
+    }
+    // first time using the app, initialize scope books
+    else {
+      $scope.books = [];
+    }
+
+    //$scope.activeBook = $scope.books[0];
+
+    // grab the active book from localStorage 
+    $scope.activeBook = $localStorage.activeBook;
     $scope.showDelete = false;
 
     $ionicModal.fromTemplateUrl('templates/createBookModal.html', {
@@ -97,14 +109,18 @@ angular.module('start', ['ionic', 'start.characters', 'start.character'])
 
     $scope.createBook = function() {
       var sameBookName = false;
-      for(i = 0; i < $scope.books.length; i++) {
-        if($scope.tempBook.title.toLowerCase() == $scope.books[i].title.toLowerCase()) {
-          sameBookName = true;
+      if($scope.books.length > 0) {
+        for(i = 0; i < $scope.books.length; i++) {
+          if($scope.tempBook.title.toLowerCase() == $scope.books[i].title.toLowerCase()) {
+            sameBookName = true;
+          }
         }
       }
       if($scope.tempBook.title && !sameBookName) {
         var newBook = Books.newBook($scope.tempBook.title, $scope.tempBook.author);
         $scope.books.push(newBook);
+        $scope.setActiveBook(newBook);
+        $localStorage.books = $scope.books;
         $scope.cleanTempBook();
         $scope.closeBookModal();
       }
@@ -138,7 +154,16 @@ angular.module('start', ['ionic', 'start.characters', 'start.character'])
           type: 'button-assertive',
           onTap: function(e) {
             $scope.books.splice(position, 1);
-            $scope.activeBook = $scope.books[0];
+            if($scope.books.length == 0) {
+              $scope.setActiveBook(null);
+            }
+            else {
+              $scope.activeBook = $scope.books[0];
+            }
+            $scope.showDelete = false;
+            console.log($scope.showDelete);
+            $localStorage.books = $scope.books;
+            $localStorage.activeBook = $scope.activeBook;
           }}
         ]
       });
@@ -146,7 +171,16 @@ angular.module('start', ['ionic', 'start.characters', 'start.character'])
 
     $scope.setActiveBook = function(book) {
       $scope.activeBook = book;
+      $localStorage.activeBook = $scope.activeBook;
     };
+
+    $scope.saveBooksToStorage = function() {
+      $localStorage.books = $scope.books;
+    }
+
+    $scope.saveActiveCharacterToStorage = function(character) {
+      $localStorage.activeCharacter = character;
+    }
 
     $scope.cleanTempBook = function() {
       $scope.tempBook.title = '';

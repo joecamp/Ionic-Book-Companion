@@ -1,13 +1,13 @@
 <ion-view hide-nav-bar="false">
 	<ion-nav-title>
 		<span style="font-style:italic" ng-if="activeBook.title">{{activeBook.title}}</span>
-		<span ng-if="!activeBook.title">No Book Selected</span>
+		<span ng-if="!activeBook.title || activeBook.title == ''">No Book Selected</span>
 	</ion-nav-title>
 	<ion-nav-buttons side="right">
     <button class="button button-clear icon-left ion-person-add" ng-click="openCharacterModal()">
     </button>
   </ion-nav-buttons>
-	<ion-content scroll="true" class="has-header">
+	<ion-content class="has-header">
 		<label class="item item-input">
     	<i class="icon ion-search placeholder-icon"></i>
     	&#160;&#160;
@@ -17,6 +17,8 @@
 		<ion-list>
       <ion-item class="item item-text-wrap" href="#/app/character" ng-repeat="character in activeBook.characters | filter:searchCharacter" ng-click="setActiveCharacter(character)">
       	{{character.name}}
+      	<div class="energized ion-android-star" ng-if="character.characterType == 'Main Character'" style="display: inline-block; margin-left: .2em">
+      	</div>
       </ion-item>
     </ion-list>
 	</ion-content>

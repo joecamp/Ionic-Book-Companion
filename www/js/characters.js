@@ -1,4 +1,4 @@
-angular.module('start.characters', [])
+angular.module('start.characters', ['ngStorage'])
 
 	.config(function ($stateProvider, $ionicConfigProvider) {
   	$ionicConfigProvider.navBar.alignTitle('center');
@@ -26,10 +26,13 @@ angular.module('start.characters', [])
  		var getActiveCharacter = function(character) {
  			return activeCharacter;
  		};
- 		var newCharacter = function(name, age) {
+ 		var newCharacter = function(character) {
  			return {
- 				name: name,
- 				age: age
+ 				name: character.name,
+ 				firstAppeared: character.firstAppeared,
+ 				characterType: character.characterType,
+ 				description: character.description,
+ 				notes: character.notes
  			}
  		}
 
@@ -40,14 +43,18 @@ angular.module('start.characters', [])
     };
   })
 
-	.controller('CharactersCtrl', function($scope, CharactersService, $stateParams, $ionicModal, $ionicPopup) {
+	.controller('CharactersCtrl', function($scope, CharactersService, $localStorage, $stateParams, $ionicModal, $ionicPopup) {
 		
 		$scope.tempChar = {
       name: '',
-      age: '',
+      firstAppeared: '',
+      characterType: '',
+      description: '',
+      notes: ''
     }
 
-		$scope.activeCharacter;
+		//$scope.activeCharacter = $localStorage.activeCharacter;
+		CharactersService.setActiveCharacter($localStorage.activeCharacter);
 
 		$ionicModal.fromTemplateUrl('templates/createCharacterModal.html', {
     scope: $scope,
@@ -72,8 +79,9 @@ angular.module('start.characters', [])
         }
       }
       if($scope.tempChar.name && !sameCharName) {
-        var newChar = CharactersService.newCharacter($scope.tempChar.name, $scope.tempChar.age);
+        var newChar = CharactersService.newCharacter($scope.tempChar);
         $scope.activeBook.characters.push(newChar);
+        $scope.saveBooksToStorage();
         $scope.cleanTempChar();
         $scope.closeCharacterModal();
       }
@@ -87,10 +95,19 @@ angular.module('start.characters', [])
 
 		$scope.setActiveCharacter = function(character) {
 			CharactersService.setActiveCharacter(character);
+			$localStorage.activeCharacter = CharactersService.getActiveCharacter();
 		};
+
+		$scope.retrieveActiveCharacterFromStorage = function() {
+			CharactersService.setActiveCharacter($localStorage.activeCharacter);
+			console.log($scope.activeCharacter);
+		}
 
 		$scope.cleanTempChar = function() {
 			$scope.tempChar.name = '';
-      $scope.tempChar.age = '';
+      $scope.tempChar.firstAppeared = '';
+      $scope.tempChar.characterType = '';
+      $scope.tempChar.description = '';
+      $scope.tempChar.notes = '';
 		};
 	});
